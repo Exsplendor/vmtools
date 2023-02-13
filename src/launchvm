@@ -1,0 +1,64 @@
+#!/usr/bin/bash
+HELP="Start a kernel virtual machine (kvm).
+Trivial invocation, no bells and whistles. For elaborate needs user needs to
+fall back on the original kvm/qemu syntax or use abstraction layers like virsh.
+
+Example:
+
+    CDROM=linuxmint-19-64bit.iso RAM=2048 launchvm
+
+Settings through 'environment variables' or 'settings' file:
+                                                            [default value]
+    CORES           number of virtual cpus                  [2]
+    RAM             memory (RAM) size for the vm            [1024]
+    HDD0            path to first harddisk device or file   [harddisk.img]
+    CDROM           path to CDROM device or file            [newest .iso file]
+    BOOTDRIVE       select boot device (c,d,n)              [d]
+                    ms-dos nomenclature: c->first harddisk,
+            d->cdrom, etc.
+
+
+Caveats:
+
+    - script mustn't have any arguments
+    - configuration through environment variables and config file.
+    - cdrom defaults to newest .iso file
+
+
+Tips:
+
+    - create an image file with: qemu-img create -f qcow2 harddisk.img 10G
+    - to save your settings just execute: 'launchvm > settings'
+
+
+usage: launchvm
+"
+
+[ "$#" -gt 0 ] && echo "$HELP"\
+&& exit
+
+# settings from file, then environment vars, then defaults:
+[ -f ${CFG_FILE:=settings} ] && source "./$CFG_FILE"
+# env-VARs + defaults in one swoop:
+echo "# launchvm settings
+CDROM=\${CDROM:-${CDROM:=`ls -t *.iso|head -1`}}
+HDD0=\${HDD0:-${HDD0:=`ls -t *.img|head -1`}}
+RAM=\${RAM:-${RAM:=1024}}
+CORES=\${CORES:-${CORES:=2}}
+BOOTDRIVE=\${BOOTDRIVE:-${BOOTDRIVE:=d}}
+"
+# TODO: simpler config-file syntax: CDROM=ubuntu-20.04-desktop.iso
+
+
+kvm -cdrom  ${CDROM}\
+    -hda    ${HDD0}\
+    -m      ${RAM}\
+    -cpu    host\
+    -smp    ${CORES}\
+    -boot   once=${BOOTDRIVE}\
+    -global ide-hd.physical_block_size=4096\
+|| echo "$HELP" || exit 1
+    # No support for logical block size atm for ide drives:
+    # -global ide-hd.logical_block_size=4096\ 
+
+# TODO: UEFI support 

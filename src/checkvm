@@ -1,0 +1,60 @@
+#!/usr/bin/bash
+HELP="Check if requirements for running a kernel virtual machine are met.
+
+Example:
+    
+    checkvm && echo 'KVM ready!'
+    checkvm || echo 'Requirements for KVM not met!'
+
+
+Looks for:
+
+    - CPU flags: VMX/SVM (AMD/Intel) 
+    - Kernel Modules
+    - QEMU/KVM programs
+
+
+usage: checkvm
+"
+
+
+# TODO: Check for IOMMU support: (PCIe passtrough)
+
+
+_abort()  { echo -e "$1"; exit 1; }
+_trycmd() { type $1 >/dev/null 2>&1; }
+
+# Script Mustn't Have Any Arguments:
+
+    test "$#" -lt 1 || _abort "$HELP" 
+
+
+# Shell Commands Needed For This Script To Probe Virtualization Capabilities:
+
+    NEEDED_PROGRAMS=(bash egrep)
+    for PROGRAM in ${NEEDED_PROGRAMS[@]}; do 
+        _trycmd $PROGRAM || NEEDS_TO_BE_INSTALLED+="$PROGRAM "
+    done
+    test -n "$NEEDS_TO_BE_INSTALLED" \
+        && _abort "Failed to check due to missing programs: $NEEDS_TO_BE_INSTALLED" 
+
+
+# Test For CPU-Virtualization Support And Loaded KVM Modules:
+
+    egrep "${VM_AMD:=vmx}|${VM_INTEL:=svm}" /proc/cpuinfo >/dev/null 2>&1\
+        || _abort "CPU doesn't support hardware virtualization."
+
+    egrep kvm <(lsmod)  >/dev/null 2>&1\
+        || _abort "No KVM Modules loaded. Try:\n modprobe kvm"
+
+
+# Programs Needed For KVM Support:
+
+    NEEDED_PROGRAMS=(qemu-system-x86_64 kvm)
+    for PROGRAM in ${NEEDED_PROGRAMS[@]}; do 
+        _trycmd $PROGRAM || NEEDS_TO_BE_INSTALLED+="$PROGRAM "
+    done
+    test -n "$NEEDS_TO_BE_INSTALLED" \
+        && _abort "Missing programs: $NEEDS_TO_BE_INSTALLED"\
+
+exit 0

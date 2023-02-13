@@ -1,0 +1,36 @@
+#!/usr/bin/bash
+HELP="Creates a virtual harddisk for kernel virtual machines (kvm).
+
+Example:
+
+    mkimg harddisk.img 10G      # create a image file of size 10G 
+    mkimg swap.img              # default size of 4G
+
+usage: mkimg <filename> [size]
+"
+
+
+# Scripting Helpers
+_abort()   { echo "$1"; exit 1; }
+_trycmd()  { type $1 >/dev/null 2>&1; }
+
+
+# Shell Commands Needed For This Script To Create an Image-File:
+
+    NEEDED_PROGRAMS=(bash qemu-img)
+    for PROGRAM in ${NEEDED_PROGRAMS[@]}; do 
+        _trycmd $PROGRAM || NEEDS_TO_BE_INSTALLED+="$PROGRAM "
+    done
+    test -n "$NEEDS_TO_BE_INSTALLED" \
+        && _abort "Failed to check due to missing programs: $NEEDS_TO_BE_INSTALLED" 
+
+
+# script must have at least one argument!
+
+    test "$#" -eq 0 && echo "$HELP" && exit
+
+    NAME="$1"; SIZE="${2:-4G}"     
+    qemu-img create -f qcow2 "$NAME" "$SIZE"
+
+
+exit 0
