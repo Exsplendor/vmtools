@@ -10,12 +10,12 @@ Example:
 Settings through 'environment variables' or 'settings' file:
                                                             [default value]
     CORES           number of virtual cpus                  [2]
-    RAM             memory (RAM) size for the vm            [1024]
+    RAM             memory (RAM) size for the vm            [2048]
     HDD0            path to first harddisk device or file   [harddisk.img]
     CDROM           path to CDROM device or file            [newest .iso file]
     BOOTDRIVE       select boot device (c,d,n)              [d]
                     ms-dos nomenclature: c->first harddisk,
-            d->cdrom, etc.
+                    d->cdrom, etc.
 
 
 Caveats:
@@ -41,24 +41,29 @@ usage: launchvm
 [ -f ${CFG_FILE:=settings} ] && source "./$CFG_FILE"
 # env-VARs + defaults in one swoop:
 echo "# launchvm settings
-CDROM=\${CDROM:-${CDROM:=`ls -t *.iso|head -1`}}
+CDROM=\${CDROM:-${CDROM:=`ls -t *.iso|head -1`}} 
 HDD0=\${HDD0:-${HDD0:=`ls -t *.img|head -1`}}
-RAM=\${RAM:-${RAM:=1024}}
+RAM=\${RAM:-${RAM:=2048}}
 CORES=\${CORES:-${CORES:=2}}
 BOOTDRIVE=\${BOOTDRIVE:-${BOOTDRIVE:=d}}
 "
 # TODO: simpler config-file syntax: CDROM=ubuntu-20.04-desktop.iso
 
-
-kvm -cdrom  ${CDROM}\
+OPTIONAL='-usb -usbdevice tablet -display gtk,gl=on -full-screen -device virtio-vga,xres=1920,yres=1080'
+#OPTIONAL='-vga virtio -display gtk,gl=on -full-screen'
+#OPTIONAL='-device virtio-vga,edid=on,xres=1920,yres=1080 -full-screen'
+KVM="qemu-system-x86_64 -enable-kvm -machine q35"
+$KVM -cdrom  ${CDROM}\
     -hda    ${HDD0}\
     -m      ${RAM}\
     -cpu    host\
     -smp    ${CORES}\
     -boot   once=${BOOTDRIVE}\
     -global ide-hd.physical_block_size=4096\
-|| echo "$HELP" || exit 1
+    -vga    std $OPTIONAL\
+    || echo "$HELP" || exit 1
     # No support for logical block size atm for ide drives:
     # -global ide-hd.logical_block_size=4096\ 
 
 # TODO: UEFI support 
+# vi: set sw=4 ts=4 ai et :
