@@ -49,7 +49,7 @@ BOOTDRIVE=\${BOOTDRIVE:-${BOOTDRIVE:=d}}
 "
 # TODO: simpler config-file syntax: CDROM=ubuntu-20.04-desktop.iso
 
-OPTIONAL='-usb -usbdevice tablet -display gtk,gl=on -full-screen -device virtio-vga,xres=1920,yres=1080'
+OPTIONAL='-nodefaults -monitor stdio -usb -usbdevice tablet -display gtk,gl=on -device virtio-vga,xres=1920,yres=1080'
 #OPTIONAL='-vga virtio -display gtk,gl=on -full-screen'
 #OPTIONAL='-device virtio-vga,edid=on,xres=1920,yres=1080 -full-screen'
 KVM="qemu-system-x86_64 -enable-kvm -machine q35"

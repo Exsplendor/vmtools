@@ -1,0 +1,34 @@
+VM-Tools
+========
+
+Scripts to simplify VirtualMachine (qemu) automation.
+
+---
+
+- [Example](#example)
+- [For Developers](#for-developerst)
+- [Disclaimers](#disclaimers)
+
+---
+
+## Example
+
+```bash
+mkimg new_vm.img 20G
+fetchiso ubuntu 22.10
+checkvm && launchvm
+```
+ 
+## For Developers
+
+No more specific information atm.
+
+
+## Disclaimers
+
+This **Read.Me** is a link to doc/Read.us!
+The **License** is the MIT-License.
+
+
+
+[//]: # ( vi: set et ts=4 sw=4 ai ft=markdown tw=80 cc=+0 spl=en: )
