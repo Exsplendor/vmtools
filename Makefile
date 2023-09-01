@@ -28,8 +28,8 @@ installed_executables:=$(addprefix ${xprefix}/, ${ScriptsToInstall})
 
 define HELP
 
-make install: installs $(INSTALLABLES)
-make uninstall: removes $(INSTALLABLES)
+make install: installs $(ScriptsToInstall)
+make uninstall: removes $(ScriptsToInstall)
 make help: shows the text you are currently reading
 
 endef

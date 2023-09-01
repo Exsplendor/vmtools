@@ -13,11 +13,13 @@ usage: fetchiso <word> [word]
 
 URL_LIST="
 http://ftp-stud.hs-esslingen.de/pub/Mirrors/linuxmint.com/stable/20/linuxmint-20-cinnamon-64bit.iso
-https://ftp.halifax.rwth-aachen.de/archlinux/iso/latest/archlinux-2021.02.01-x86_64.iso
+https://mirrors.layeronline.com/linuxmint/stable/21.1/linuxmint-21.1-cinnamon-64bit.iso
+https://ftp.halifax.rwth-aachen.de/archlinux/iso/latest/archlinux-2023.08.01-x86_64.iso
 http://de.mirror.archlinux32.org/archisos/archlinux-2021.02.01-i686.iso
 https://ftp.halifax.rwth-aachen.de/freebsd/releases/ISO-IMAGES/12.1/FreeBSD-12.1-RELEASE-amd64-dvd1.iso
 https://ftp.halifax.rwth-aachen.de/ubuntu-releases/20.04/ubuntu-20.04-desktop-amd64.iso
 https://ftp.halifax.rwth-aachen.de/ubuntu-releases/22.04/ubuntu-22.04-desktop-amd64.iso
+https://ftp.halifax.rwth-aachen.de/ubuntu-releases/23.04/ubuntu-23.04-desktop-amd64.iso
 https://ftp.halifax.rwth-aachen.de/ubuntu-releases/20.10/ubuntu-20.10-desktop-amd64.iso
 https://ftp.halifax.rwth-aachen.de/ubuntu-releases/20.04/ubuntu-20.04-live-server-amd64.iso
 https://osdn.net/frs/redir.php?m=dotsrc&f=instantos%2F73384%2Finstantos_beta4.iso
@@ -27,6 +29,7 @@ https://iso.pop-os.org/22.04/amd64/nvidia/15/pop-os_22.04_amd64_nvidia_15.iso
 https://iso.pop-os.org/22.04/amd64/intel/15/pop-os_22.04_amd64_intel_15.iso
 https://deac-riga.dl.sourceforge.net/project/reactos/ReactOS/0.4.13/ReactOS-0.4.13-release-14-g2494cfc-live.zip
 https://ant.seedhost.eu/arcolinux/iso/v23.02.02/arcolinuxb-chadwm-v23.02.02-x86_64.iso
+https://download.manjaro.org/gnome/22.0.5/manjaro-gnome-22.0.5-230316-linux61.iso
 "
 
 # Scripting Helpers
