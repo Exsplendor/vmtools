@@ -1,0 +1,29 @@
+#!/usr/bin/bash
+HELP="
+Usage:
+    
+    `basename $0` 
+"
+SCRIPT_NEEDS=(bash inotifywait)
+
+
+# Scripting Helpers
+_abort()   { echo "$1"; exit 1; }
+_trycmd()  { which $1 >/dev/null 2>&1; }
+
+
+# Abort Script On Missing Arguments Or Required Programs 
+
+    [ "$#" -gt 0 ] && _abort "$HELP"
+    for CMD in ${SCRIPT_NEEDS[@]}; do
+        _trycmd $CMD || PLEASE_INSTALL+="$CMD "
+    done
+
+    test -n "$PLEASE_INSTALL" \
+        && _abort "Failed to check due to missing programs: $PLEASE_INSTALL" 
+
+while inotifywait -qr -e modify src/ ; do
+    make install
+done
+
+# vi: et sw=4 ts=4 list

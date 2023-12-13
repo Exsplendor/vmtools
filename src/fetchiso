@@ -15,29 +15,32 @@ URL_LIST="
 http://ftp-stud.hs-esslingen.de/pub/Mirrors/linuxmint.com/stable/20/linuxmint-20-cinnamon-64bit.iso
 https://mirrors.layeronline.com/linuxmint/stable/21.1/linuxmint-21.1-cinnamon-64bit.iso
 https://ftp.halifax.rwth-aachen.de/archlinux/iso/latest/archlinux-2023.08.01-x86_64.iso
+https://ftp.halifax.rwth-aachen.de/archlinux/iso/latest/archlinux-2023.10.14-x86_64.iso
+https://ftp.halifax.rwth-aachen.de/archlinux/iso/latest/archlinux-2023.12.01-x86_64.iso
 http://de.mirror.archlinux32.org/archisos/archlinux-2021.02.01-i686.iso
 https://ftp.halifax.rwth-aachen.de/freebsd/releases/ISO-IMAGES/12.1/FreeBSD-12.1-RELEASE-amd64-dvd1.iso
 https://ftp.halifax.rwth-aachen.de/ubuntu-releases/20.04/ubuntu-20.04-desktop-amd64.iso
 https://ftp.halifax.rwth-aachen.de/ubuntu-releases/22.04/ubuntu-22.04-desktop-amd64.iso
 https://ftp.halifax.rwth-aachen.de/ubuntu-releases/23.04/ubuntu-23.04-desktop-amd64.iso
-https://ftp.halifax.rwth-aachen.de/ubuntu-releases/20.10/ubuntu-20.10-desktop-amd64.iso
-https://ftp.halifax.rwth-aachen.de/ubuntu-releases/20.04/ubuntu-20.04-live-server-amd64.iso
+https://ftp.halifax.rwth-aachen.de/ubuntu-releases/23.10/ubuntu-23.10.1-desktop-amd64.iso
 https://osdn.net/frs/redir.php?m=dotsrc&f=instantos%2F73384%2Finstantos_beta4.iso
 http://www.ibiblio.org/pub/micro/pc-stuff/freedos/files/distributions/1.2/FD12CD.iso
 https://pop-iso.sfo2.cdn.digitaloceanspaces.com/20.10/amd64/nvidia/3/pop-os_20.10_amd64_nvidia_3.iso
 https://iso.pop-os.org/22.04/amd64/nvidia/15/pop-os_22.04_amd64_nvidia_15.iso
 https://iso.pop-os.org/22.04/amd64/intel/15/pop-os_22.04_amd64_intel_15.iso
-https://deac-riga.dl.sourceforge.net/project/reactos/ReactOS/0.4.13/ReactOS-0.4.13-release-14-g2494cfc-live.zip
+https://downloads.sourceforge.net/reactos/ReactOS-0.4.14-release-98-gcb8061c-live.zip
 https://ant.seedhost.eu/arcolinux/iso/v23.02.02/arcolinuxb-chadwm-v23.02.02-x86_64.iso
 https://download.manjaro.org/gnome/22.0.5/manjaro-gnome-22.0.5-230316-linux61.iso
+https://de.freedif.org/EndeavourOS/iso/Endeavouros-Galileo-11-2023.iso
+https://iso.builds.garudalinux.org/iso/latest/garuda/gnome/latest.iso
 "
 
-# Scripting Helpers
+# scripting helpers
 _abort()   { echo "$1"; exit 1; }
 _trycmd()  { type $1 >/dev/null 2>&1; }
 
 
-# Abort Script On Missing Arguments Or Required Programs 
+# abort script on missing arguments or required programs 
 
     [ "$#" -gt 0 ] || _abort "$HELP"
     SCRIPT_NEEDS=(bash egrep wget gpg)
@@ -46,7 +49,7 @@ _trycmd()  { type $1 >/dev/null 2>&1; }
     done
 
 
-# Filter URL List 
+# filter URL list 
 
     MATCHES=$URL_LIST
     while [[ $# -gt 0 ]]; do
@@ -55,7 +58,7 @@ _trycmd()  { type $1 >/dev/null 2>&1; }
     done
 
 
-# Download Or Show URL-List
+# download or show URL-list
 
     MATCH_COUNT=`echo -n "$MATCHES" | egrep -c '^.*$'`    # `wc -l` fails
     if [[ $MATCH_COUNT -eq 1 ]]; then

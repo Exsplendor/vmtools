@@ -7,6 +7,11 @@ Example:
 
     CDROM=linuxmint-19-64bit.iso RAM=2048 launchvm
 
+With UEFI:
+
+    EFI=y launchvm    # Using default values, uses youngest .img and .iso file.
+
+
 Settings through 'environment variables' or 'settings' file:
                                                             [default value]
     CORES           number of virtual cpus                  [2]
@@ -31,7 +36,10 @@ Tips:
     - to save your settings just execute: 'launchvm > settings'
 
 
-usage: launchvm
+Usage:
+
+    launchvm
+
 "
 
 [ "$#" -gt 0 ] && echo "$HELP" && exit
@@ -48,21 +56,30 @@ BOOTDRIVE=\${BOOTDRIVE:-${BOOTDRIVE:=d}}
 "
 # TODO: simpler config-file syntax: CDROM=ubuntu-20.04-desktop.iso
 
-OPTIONAL='-monitor stdio -usb -usbdevice tablet -display gtk'
+[[ -n ${EFI} ]] && BIOS=" -bios /usr/share/ovmf/OVMF.fd"
+#vga: none, std, cirrus, vmware, xemfb, qxl, virtio
+    VGA=' -vga virtio' 
 #OPTIONAL='-vga virtio -display gtk,gl=on -full-screen'
 #OPTIONAL='-device virtio-vga,edid=on,xres=1920,yres=1080 -full-screen'
-KVM="qemu-system-x86_64 -enable-kvm -machine q35"
+    OPTIONAL=' -monitor stdio -display sdl,gl=on '
+    OPTIONAL+=' -usb -usbdevice tablet'
+    OPTIONAL+=' -object rng-random,id=rng0,filename=/dev/urandom'
+    OPTIONAL+=' -device virtio-rng-pci,rng=rng0'
+    OPTIONAL+=' -full-screen'
+
+KVM="qemu-system-x86_64 -enable-kvm -machine q35 -cpu host "
 $KVM -cdrom  ${CDROM}\
     -hda    ${HDD0}\
     -m      ${RAM}\
-    -cpu    host\
     -smp    ${CORES}\
     -boot   once=${BOOTDRIVE}\
+    $VGA \
     -global ide-hd.physical_block_size=4096\
-    -vga    std $OPTIONAL\
-    || echo "$HELP" || exit 1
+    $BIOS \
+    $OPTIONAL \
+|| echo -e "\n\n$HELP"
     # No support for logical block size atm for ide drives:
     # -global ide-hd.logical_block_size=4096\ 
+    #
 
-# TODO: UEFI support 
 # vi: set sw=4 ts=4 ai et :
